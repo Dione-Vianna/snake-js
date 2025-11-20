@@ -5,7 +5,6 @@ import { GameOver } from './components/GameOver';
 import { Leaderboard } from './components/Leaderboard';
 import { MusicPlayer } from './components/MusicPlayer';
 import { ScoreBoard } from './components/ScoreBoard';
-import { SimpleLogsPanel } from './components/SimpleLogsPanel';
 import { Snake } from './components/Snake';
 import { Walls } from './components/Walls';
 import { CELL_SIZE, GRID_HEIGHT, GRID_WIDTH } from './constants';
@@ -97,9 +96,6 @@ function App() {
           <Leaderboard highScores={highScores} />
         </div>
       </div>
-
-      {/* Logs Panel */}
-      <SimpleLogsPanel />
 
       <MusicPlayer src={getMusicForLevel(level)} initialVolume={0.3} gameOver={gameOver} isPaused={isPaused} />
     </div>

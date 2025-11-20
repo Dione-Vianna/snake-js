@@ -83,6 +83,7 @@ export const useSnakeGame = () => {
   }, []);
 
   const resetGame = () => {
+    console.log('🔄 [GAME] Reset initiated');
     setSnake(INITIAL_SNAKE);
     setDirection(INITIAL_DIRECTION);
     setGameOver(false);
@@ -97,6 +98,7 @@ export const useSnakeGame = () => {
       initialFruits.push(generateFruit(INITIAL_SNAKE, [], initialFruits));
     }
     setFruits(initialFruits);
+    console.log(`✅ [GAME] Game initialized - Level: 1, Fruits: ${MIN_FRUITS}, Speed: ${INITIAL_SPEED}ms`);
   };
 
   // Initial fruits setup
@@ -110,6 +112,7 @@ export const useSnakeGame = () => {
       }
       setFruits(initialFruits);
       isInitialized.current = true;
+      console.log(`🎮 [INIT] Initial fruits spawned: ${initialFruits.length}`);
     }
   }, [fruits.length, gameOver, snake, walls]);
 
@@ -123,28 +126,36 @@ export const useSnakeGame = () => {
           if (direction !== 'DOWN') {
             setDirection('UP');
             playMoveSound();
+            console.log('⬆️ [INPUT] Direction changed to UP');
           }
           break;
         case 'ArrowDown':
           if (direction !== 'UP') {
             setDirection('DOWN');
             playMoveSound();
+            console.log('⬇️ [INPUT] Direction changed to DOWN');
           }
           break;
         case 'ArrowLeft':
           if (direction !== 'RIGHT') {
             setDirection('LEFT');
             playMoveSound();
+            console.log('⬅️ [INPUT] Direction changed to LEFT');
           }
           break;
         case 'ArrowRight':
           if (direction !== 'LEFT') {
             setDirection('RIGHT');
             playMoveSound();
+            console.log('➡️ [INPUT] Direction changed to RIGHT');
           }
           break;
         case ' ':
-          setIsPaused((prev) => !prev);
+          setIsPaused((prev) => {
+            const newState = !prev;
+            console.log(`${newState ? '⏸️' : '▶️'} [GAME] ${newState ? 'Paused' : 'Resumed'}`);
+            return newState;
+          });
           break;
       }
     };
@@ -227,6 +238,7 @@ export const useSnakeGame = () => {
         const aiDirection = getAIDirection(snake, fruits, walls, direction);
         if (aiDirection !== direction) {
           setDirection(aiDirection);
+          console.log(`🤖 [AI] Direction changed to ${aiDirection}`);
           return; // Skip this tick to allow direction change
         }
       }
@@ -259,6 +271,7 @@ export const useSnakeGame = () => {
         walls.some((wall) => wall.x === head.x && wall.y === head.y)
       ) {
         playGameOverSound();
+        console.error('💀 [COLLISION] Game Over!', { position: head, reason: 'Wall/Boundary/Self collision' });
         setGameOver(true);
         return;
       }
@@ -274,10 +287,14 @@ export const useSnakeGame = () => {
         playEatSound(eatenFruit.type);
         const newScore = score + eatenFruit.points;
         setScore(newScore);
+        console.log(`🍎 [FRUIT] Ate ${eatenFruit.type}! +${eatenFruit.points} pts | Total: ${newScore}`);
 
         // Apply effects
         if (eatenFruit.type === 'BOLT') {
-          setSpeed((prev) => Math.max(MIN_SPEED, prev - SPEED_DECREASE_PER_BOLT));
+          const oldSpeed = speed;
+          const newSpeed = Math.max(MIN_SPEED, speed - SPEED_DECREASE_PER_BOLT);
+          setSpeed(newSpeed);
+          console.log(`⚡ [SPEED] Bolt consumed! ${oldSpeed}ms → ${newSpeed}ms`);
         }
 
         // Level up logic - Progressive scoring (doubles each level)
@@ -293,6 +310,7 @@ export const useSnakeGame = () => {
         if (newScore >= scoreNeededForNextLevel && level < MAX_LEVEL) {
           nextLevel = level + 1;
           setLevel(nextLevel);
+          console.log(`🎉 [LEVEL UP] Advanced to Level ${nextLevel}! Score needed was: ${scoreNeededForNextLevel}`);
         }
 
         const nextWalls = getWallsForLevel(nextLevel);
@@ -309,6 +327,7 @@ export const useSnakeGame = () => {
         // Chance to spawn extra fruit up to MAX_FRUITS
         if (newFruits.length < MAX_FRUITS && Math.random() < EXTRA_FRUIT_CHANCE) {
           newFruits.push(generateFruit(newSnake, nextWalls, newFruits));
+          console.log(`🎲 [SPAWN] Extra fruit spawned! Total fruits: ${newFruits.length}`);
         }
 
         setFruits(newFruits);
