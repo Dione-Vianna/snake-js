@@ -22,6 +22,8 @@ function App() {
     direction,
     resetGame,
     highScores,
+    isAutoPlay,
+    toggleAutoPlay,
   } = useSnakeGame();
 
 
@@ -29,6 +31,17 @@ function App() {
   return (
     <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center text-white touch-none">
       <h1 className="text-4xl font-bold mb-4">Snake Game</h1>
+
+      {/* Auto-Play Toggle */}
+      <button
+        onClick={toggleAutoPlay}
+        className={`mb-4 px-6 py-3 rounded-lg font-bold transition-all ${isAutoPlay
+            ? 'bg-green-500 hover:bg-green-600 shadow-lg shadow-green-500/50'
+            : 'bg-gray-700 hover:bg-gray-600'
+          }`}
+      >
+        {isAutoPlay ? '🤖 AI Playing' : '🎮 Manual Mode'}
+      </button>
 
       <ScoreBoard score={score} level={level} fps={fps} />
 

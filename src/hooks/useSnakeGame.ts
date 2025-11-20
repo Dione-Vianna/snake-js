@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { getAIDirection } from '../aiHelper';
 import {
   GRID_HEIGHT,
   GRID_WIDTH,
@@ -30,6 +31,7 @@ export const useSnakeGame = () => {
   const [level, setLevel] = useState<number>(1);
   const [walls, setWalls] = useState<Point[]>([]);
   const [highScores, setHighScores] = useState<number[]>([]);
+  const [isAutoPlay, setIsAutoPlay] = useState<boolean>(false);
 
   useEffect(() => {
     const saved = localStorage.getItem('snakeHighScores');
@@ -114,6 +116,9 @@ export const useSnakeGame = () => {
 
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent) => {
+      // Don't handle keyboard input if auto-play is enabled
+      if (isAutoPlay && e.key !== ' ') return;
+
       switch (e.key) {
         case 'ArrowUp':
           if (direction !== 'DOWN') {
@@ -210,13 +215,23 @@ export const useSnakeGame = () => {
       document.removeEventListener('touchstart', handleTouchStart);
       document.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [direction]);
+  }, [direction, isAutoPlay]);
 
   useEffect(() => {
     if (gameOver || isPaused) return;
 
     const moveSnake = () => {
       playStepSound();
+
+      // AI: Calculate next direction if auto-play is enabled
+      if (isAutoPlay) {
+        const aiDirection = getAIDirection(snake, fruits, walls, direction);
+        if (aiDirection !== direction) {
+          setDirection(aiDirection);
+          return; // Skip this tick to allow direction change
+        }
+      }
+
       const newSnake = [...snake];
       const head = { ...newSnake[0] };
 
@@ -299,7 +314,7 @@ export const useSnakeGame = () => {
 
     const gameInterval = setInterval(moveSnake, speed);
     return () => clearInterval(gameInterval);
-  }, [snake, direction, fruits, gameOver, isPaused, speed, walls, score, level]);
+  }, [snake, direction, fruits, gameOver, isPaused, speed, walls, score, level, isAutoPlay]);
 
   return {
     snake,
@@ -313,5 +328,7 @@ export const useSnakeGame = () => {
     direction,
     resetGame,
     highScores,
+    isAutoPlay,
+    toggleAutoPlay: () => setIsAutoPlay((prev) => !prev),
   };
 };
