@@ -1,5 +1,6 @@
 import { getMusicForLevel, getWallpaperForLevel } from './assetConfig';
 import { Food } from './components/Food';
+import { FruitValues } from './components/FruitValues';
 import { GameOver } from './components/GameOver';
 import { Leaderboard } from './components/Leaderboard';
 import { MusicPlayer } from './components/MusicPlayer';
@@ -36,8 +37,8 @@ function App() {
       <button
         onClick={toggleAutoPlay}
         className={`mb-4 px-6 py-3 rounded-lg font-bold transition-all ${isAutoPlay
-            ? 'bg-green-500 hover:bg-green-600 shadow-lg shadow-green-500/50'
-            : 'bg-gray-700 hover:bg-gray-600'
+          ? 'bg-green-500 hover:bg-green-600 shadow-lg shadow-green-500/50'
+          : 'bg-gray-700 hover:bg-gray-600'
           }`}
       >
         {isAutoPlay ? '🤖 AI Playing' : '🎮 Manual Mode'}
@@ -46,7 +47,13 @@ function App() {
       <ScoreBoard score={score} level={level} fps={fps} />
 
       <div className="relative w-full max-w-6xl flex flex-col lg:flex-row items-start justify-center gap-8 p-4">
-        <div className="flex flex-col items-center w-full lg:w-auto">
+        {/* Left Panel - Fruit Values */}
+        <div className="w-full max-w-md lg:w-64 shrink-0 order-2 lg:order-1">
+          <FruitValues />
+        </div>
+
+        {/* Center - Game Board */}
+        <div className="flex flex-col items-center w-full lg:w-auto order-1 lg:order-2">
           <div
             className="relative bg-gray-800 border-4 border-gray-700 shadow-2xl rounded-lg overflow-hidden shrink-0"
             style={{
@@ -84,7 +91,8 @@ function App() {
           </div>
         </div>
 
-        <div className="w-full max-w-md lg:w-64 shrink-0">
+        {/* Right Panel - Leaderboard */}
+        <div className="w-full max-w-md lg:w-64 shrink-0 order-3">
           <Leaderboard highScores={highScores} />
         </div>
       </div>
