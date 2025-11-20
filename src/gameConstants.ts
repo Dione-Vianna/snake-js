@@ -2,7 +2,7 @@
 
 // Scoring
 export const SCORE_PER_LEVEL = 100;
-export const MAX_LEVEL = 5;
+export const MAX_LEVEL = 10;
 
 // Speed
 export const MIN_SPEED = 50;

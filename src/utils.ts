@@ -48,6 +48,66 @@ export const getWallsForLevel = (level: number): Point[] => {
         }
       }
       break;
+    case 6: // Diagonal corridors
+      for (let i = 5; i < Math.min(GRID_WIDTH, GRID_HEIGHT) - 5; i++) {
+        if (i % 3 !== 0) walls.push({ x: i, y: i });
+      }
+      for (let i = 5; i < Math.min(GRID_WIDTH, GRID_HEIGHT) - 5; i++) {
+        if (i % 3 !== 1) walls.push({ x: GRID_WIDTH - 1 - i, y: i });
+      }
+      break;
+    case 7: // Maze corridors
+      for (let x = 10; x < GRID_WIDTH - 10; x += 6) {
+        for (let y = 3; y < GRID_HEIGHT - 3; y++) {
+          if (y < midY - 2 || y > midY + 2) walls.push({ x, y });
+        }
+      }
+      break;
+    case 8: // Spiral
+      const spiralSize = 8;
+      // Outer box with openings
+      for (let x = spiralSize; x < GRID_WIDTH - spiralSize; x++) {
+        if (x < midX - 3 || x > midX + 3) { // Opening in middle
+          walls.push({ x, y: spiralSize });
+          walls.push({ x, y: GRID_HEIGHT - spiralSize - 1 });
+        }
+      }
+      for (let y = spiralSize; y < GRID_HEIGHT - spiralSize; y++) {
+        if (y < midY - 3 || y > midY + 3) { // Opening in middle
+          walls.push({ x: spiralSize, y });
+          walls.push({ x: GRID_WIDTH - spiralSize - 1, y });
+        }
+      }
+      // Inner partial box (with openings)
+      for (let x = spiralSize + 4; x < GRID_WIDTH - spiralSize - 4; x++) {
+        if (x < midX - 2 || x > midX + 2) {
+          walls.push({ x, y: spiralSize + 4 });
+          walls.push({ x, y: GRID_HEIGHT - spiralSize - 5 });
+        }
+      }
+      break;
+    case 9: // Pillars
+      for (let x = 8; x < GRID_WIDTH - 8; x += 8) {
+        for (let y = 6; y < GRID_HEIGHT - 6; y += 6) {
+          walls.push({ x, y });
+          walls.push({ x: x + 1, y });
+          walls.push({ x, y: y + 1 });
+          walls.push({ x: x + 1, y: y + 1 });
+        }
+      }
+      break;
+    case 10: // Complex maze
+      for (let y = 8; y < GRID_HEIGHT - 8; y += 6) {
+        for (let x = 5; x < GRID_WIDTH - 5; x++) {
+          if (x % 8 < 5) walls.push({ x, y });
+        }
+      }
+      for (let x = 12; x < GRID_WIDTH - 12; x += 10) {
+        for (let y = 5; y < GRID_HEIGHT - 5; y++) {
+          if (y % 7 < 4) walls.push({ x, y });
+        }
+      }
+      break;
   }
   return walls;
 };
