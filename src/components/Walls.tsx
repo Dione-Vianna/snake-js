@@ -7,7 +7,10 @@ type WallsProps = {
 };
 
 const getWallStyle = (level: number) => {
-  switch (level) {
+  // Cycle colors for levels 6-10 (reuse 1-5)
+  const colorLevel = ((level - 1) % 5) + 1;
+
+  switch (colorLevel) {
     case 1: // Stone: Slate gray/metal
       return 'bg-gradient-to-br from-slate-600 to-slate-800 shadow-[inset_-2px_-2px_4px_rgba(0,0,0,0.5),inset_2px_2px_4px_rgba(255,255,255,0.2)] border-slate-900';
     case 2: // Ice: Cyan/Blue

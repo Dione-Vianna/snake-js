@@ -18,13 +18,13 @@ export const LEVEL_ASSETS = {
   ],
 } as const;
 
-// Helper functions to get assets by level (1-indexed)
+// Helper functions to get assets by level (1-indexed) - cycles for levels 6-10
 export const getMusicForLevel = (level: number): string => {
-  const index = Math.max(0, Math.min(level - 1, LEVEL_ASSETS.music.length - 1));
+  const index = (level - 1) % LEVEL_ASSETS.music.length;
   return LEVEL_ASSETS.music[index];
 };
 
 export const getWallpaperForLevel = (level: number): string => {
-  const index = Math.max(0, Math.min(level - 1, LEVEL_ASSETS.wallpapers.length - 1));
+  const index = (level - 1) % LEVEL_ASSETS.wallpapers.length;
   return LEVEL_ASSETS.wallpapers[index];
 };
