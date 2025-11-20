@@ -13,8 +13,7 @@ import {
   MAX_LEVEL,
   MIN_FRUITS,
   MIN_SPEED,
-  SCORE_PER_LEVEL,
-  SPEED_DECREASE_PER_BOLT,
+  SPEED_DECREASE_PER_BOLT
 } from '../gameConstants';
 import type { Fruit, Point } from '../types';
 import { generateFruit, getWallsForLevel, playEatSound, playGameOverSound, playMoveSound, playStepSound } from '../utils';
@@ -281,9 +280,17 @@ export const useSnakeGame = () => {
           setSpeed((prev) => Math.max(MIN_SPEED, prev - SPEED_DECREASE_PER_BOLT));
         }
 
-        // Level up logic
+        // Level up logic - Progressive scoring (doubles each level)
+        // Level 2: 100, Level 3: 200, Level 4: 400, Level 5: 800, etc.
+        const getScoreForLevel = (lvl: number) => {
+          if (lvl <= 1) return 0;
+          return 100 * Math.pow(2, lvl - 2); // 100 * 2^(level-2)
+        };
+
         let nextLevel = level;
-        if (newScore % SCORE_PER_LEVEL < score % SCORE_PER_LEVEL && level < MAX_LEVEL) {
+        const scoreNeededForNextLevel = getScoreForLevel(level + 1);
+
+        if (newScore >= scoreNeededForNextLevel && level < MAX_LEVEL) {
           nextLevel = level + 1;
           setLevel(nextLevel);
         }
