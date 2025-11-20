@@ -55,6 +55,17 @@ export const useSnakeGame = () => {
     }
   }, [gameOver]);
 
+  // Auto-restart in AI mode
+  useEffect(() => {
+    if (gameOver && isAutoPlay) {
+      console.log('🔄 [AI] Auto-restarting in 2 seconds...');
+      const timeout = setTimeout(() => {
+        resetGame();
+      }, 2000);
+      return () => clearTimeout(timeout);
+    }
+  }, [gameOver, isAutoPlay]);
+
   useEffect(() => {
     setWalls(getWallsForLevel(level));
   }, [level]);
