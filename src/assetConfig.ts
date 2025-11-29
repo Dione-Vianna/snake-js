@@ -3,18 +3,18 @@
 
 export const LEVEL_ASSETS = {
   music: [
-    '/src/music/VoxelRevolution.mp3',      // Level 1
-    '/src/music/NewerWave.mp3',             // Level 2
-    '/src/music/BleepingDemo.mp3',          // Level 3
-    '/src/music/BeautyFlow.mp3',            // Level 4
-    '/src/music/DesertofLostSouls.mp3',    // Level 5
+    '/music/VoxelRevolution.mp3',      // Level 1
+    '/music/NewerWave.mp3',             // Level 2
+    '/music/BleepingDemo.mp3',          // Level 3
+    '/music/BeautyFlow.mp3',            // Level 4
+    '/music/DesertofLostSouls.mp3',    // Level 5
   ],
   wallpapers: [
-    '/src/wallpaper/01.gif',  // Level 1
-    '/src/wallpaper/02.gif',  // Level 2
-    '/src/wallpaper/03.gif',  // Level 3
-    '/src/wallpaper/04.gif',  // Level 4
-    '/src/wallpaper/05.gif',  // Level 5
+    '/wallpaper/01.gif',  // Level 1
+    '/wallpaper/02.gif',  // Level 2
+    '/wallpaper/03.gif',  // Level 3
+    '/wallpaper/04.gif',  // Level 4
+    '/wallpaper/05.gif',  // Level 5
   ],
 } as const;
 
